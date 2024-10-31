@@ -1,5 +1,4 @@
 plugins {
-    id("java-test-fixtures")
     id("maven-publish")
     id("signing")
     id("mavenCentral")
@@ -11,9 +10,6 @@ publishing {
             name = "GitHubPackages"
             credentials(PasswordCredentials::class)
         }
-    }
-    publications.register<MavenPublication>("gpr") {
-        from(components["java"])
     }
     publications.withType<MavenPublication>().configureEach {
         pom {
