@@ -11,3 +11,11 @@ dependencies {
     api(libs.ktor.client.content.negotiation)
     api(libs.ktor.serialization.kotlinx.json)
 }
+
+dependencies {
+    mavenCentralWorker(libs.mavencentral.runtime) {
+        version {
+            strictly(libs.versions.mavencentral.get())
+        }
+    }
+}
