@@ -10,6 +10,7 @@ dependencies {
     compileOnly(libs.ktor.client.logging)
     compileOnly(libs.ktor.client.content.negotiation)
     compileOnly(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.plugins.kotlin.serialization.dep)
 }
 
 val Provider<PluginDependency>.dep: Provider<String> get() = map { "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version}" }

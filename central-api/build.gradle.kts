@@ -1,5 +1,6 @@
 plugins {
     id("kotlinSetup")
+    kotlin("plugin.serialization")
     id("java-test-fixtures")
 }
 

@@ -15,4 +15,5 @@ ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.1" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.5" }
