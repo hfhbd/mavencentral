@@ -59,8 +59,13 @@ internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParamete
             zipFile = this@PublishWorker.parameters.uploadZip.asFile.get(),
             userName = parameters.userName.get(),
             password = parameters.password.get(),
+            logAll = logger.isDebugEnabled,
         ) {
-            logger.debug(it)
+            if (logger.isDebugEnabled) {
+                logger.debug(it)
+            } else {
+                logger.info(it)
+            }
         }
     }
 }

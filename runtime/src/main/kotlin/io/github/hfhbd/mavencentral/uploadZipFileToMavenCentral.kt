@@ -21,6 +21,7 @@ suspend fun uploadZipFileToMavenCentral(
     zipFile: File,
     userName: String,
     password: String,
+    logAll: Boolean,
     customLogger: (String) -> Unit,
 ) {
     val client = HttpClient(Java) {
@@ -34,7 +35,11 @@ suspend fun uploadZipFileToMavenCentral(
             json()
         }
         install(Logging) {
-            level = LogLevel.BODY
+            level = if (logAll) {
+                LogLevel.ALL
+            } else {
+                LogLevel.INFO
+            }
             logger = object : Logger {
                 override fun log(message: String) {
                     customLogger(message)
@@ -53,6 +58,7 @@ suspend fun uploadZipFileToMavenCentral(
                 transferFrom(zipFile.inputStream().asSource())
             }
         }))
+        parameter("publishingType", "AUTOMATIC")
     }
     while (true) {
         delay(1.seconds)

@@ -1,7 +1,7 @@
 plugins {
     id("maven-publish")
     id("signing")
-    id("mavenCentral")
+    id("io.github.hfhbd.mavencentral")
 }
 
 publishing {
