@@ -24,7 +24,7 @@ tasks.publish {
 }
 
 publishing {
-    val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/repo")
+    val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
     val repoName = "localMavenCentral"
 
 
@@ -36,15 +36,10 @@ publishing {
     publications.withType<MavenPublication>().all {
         val pubName = name.replaceFirstChar { it.uppercaseChar() }
 
-        val publishToLocalMavenCentral =
-            tasks.named(
-                "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
-                PublishToMavenRepository::class.java
-            ) {
-                doFirst {
-                    localMavenCentralRepoDir.get().asFile.deleteRecursively()
-                }
-            }
+        val publishToLocalMavenCentral = tasks.named(
+            "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
+            PublishToMavenRepository::class.java,
+        )
 
         val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile${pubName}", Zip::class) {
             dependsOn(publishToLocalMavenCentral)
