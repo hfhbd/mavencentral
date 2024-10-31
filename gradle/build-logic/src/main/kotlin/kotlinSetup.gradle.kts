@@ -3,7 +3,6 @@ plugins {
     id("setup")
 }
 
-
 kotlin.jvmToolchain(8)
 
 dependencies {
@@ -13,4 +12,8 @@ dependencies {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+publishing.publications.register<MavenPublication>("gpr") {
+    from(components["java"])
 }

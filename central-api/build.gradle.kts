@@ -1,5 +1,6 @@
 plugins {
     id("kotlinSetup")
+    id("java-test-fixtures")
 }
 
 dependencies {
