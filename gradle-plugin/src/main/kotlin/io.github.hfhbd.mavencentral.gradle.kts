@@ -23,9 +23,11 @@ tasks.publish {
 }
 
 publishing {
-    val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
+    val versionProvider = provider { version.toString() }
+    val localMavenCentralRepoDir = versionProvider.map {
+        layout.buildDirectory.dir("mavencentral/${it}/repo")
+    }
     val repoName = "localMavenCentral"
-
 
     repositories.maven {
         name = repoName
@@ -38,12 +40,20 @@ publishing {
         val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
             PublishToMavenRepository::class.java,
-        )
+        ) {
+            val signTaskName = "sign${pubName}Publication"
+            if (signTaskName in tasks.names) {
+                dependsOn(signTaskName)
+            }
+        }
+
+        val repoFiles = files(localMavenCentralRepoDir) {
+            builtBy(publishToLocalMavenCentral)
+        }
 
         val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile${pubName}", Zip::class) {
-            dependsOn(publishToLocalMavenCentral)
             archiveFileName.set("${project.group}-${project.name}-${version}.zip")
-            from(localMavenCentralRepoDir) {
+            from(repoFiles) {
                 exclude {
                     it.name.startsWith("maven-metadata.xml")
                 }
