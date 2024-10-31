@@ -24,7 +24,7 @@ develocity {
     }
 }
 
-rootProject.name = "maven-central"
+rootProject.name = "mavencentral"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

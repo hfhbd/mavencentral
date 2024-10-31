@@ -1,3 +1,5 @@
+package io.github.hfhbd.mavencentral
+
 import client.checkStatus
 import client.uploadComponents
 import io.ktor.client.*
@@ -13,7 +15,7 @@ import io.ktor.util.*
 import kotlinx.coroutines.delay
 import kotlinx.io.asSource
 import java.io.File
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 suspend fun uploadZipFileToMavenCentral(
     zipFile: File,
@@ -53,7 +55,7 @@ suspend fun uploadZipFileToMavenCentral(
         }))
     }
     while (true) {
-        delay(500.milliseconds)
+        delay(1.seconds)
         val status = client.checkStatus(id = deploymentId)!!
         when (status.deploymentState) {
             DeploymentResponseFilesDeploymentState.Pending,
