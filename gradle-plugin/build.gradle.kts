@@ -25,8 +25,8 @@ sourceSets.main {
 }
 
 gradlePlugin.plugins.configureEach {
-    displayName = "MavenCentral hfhbd Gradle Plugin"
-    description = "MavenCentral hfhbd Gradle Plugin"
+    displayName = "hfhbd mavencentral Gradle Plugin"
+    description = "hfhbd mavencentral Gradle Plugin"
 }
 
 configurations.configureEach {

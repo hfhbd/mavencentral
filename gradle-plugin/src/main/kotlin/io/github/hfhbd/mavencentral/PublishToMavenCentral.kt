@@ -1,8 +1,11 @@
+package io.github.hfhbd.mavencentral
+
 import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.logging.Logging
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
@@ -49,7 +52,7 @@ internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParamete
         val password: Property<String>
     }
 
-    private val logger = org.gradle.api.logging.Logging.getLogger(PublishWorker::class.java)
+    private val logger = Logging.getLogger(PublishWorker::class.java)
 
     override fun execute(): Unit = runBlocking {
         uploadZipFileToMavenCentral(

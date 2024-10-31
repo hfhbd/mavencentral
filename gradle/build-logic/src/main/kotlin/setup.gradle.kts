@@ -7,7 +7,7 @@ plugins {
 
 publishing {
     repositories {
-        maven(url = "https://maven.pkg.github.com/hfhbd/adventOfCode") {
+        maven(url = "https://maven.pkg.github.com/hfhbd/mavencentral") {
             name = "GitHubPackages"
             credentials(PasswordCredentials::class)
         }
@@ -17,9 +17,9 @@ publishing {
     }
     publications.withType<MavenPublication>().configureEach {
         pom {
-            name.set("hfhbd AdventOfCode")
-            description.set("hfhbd AdventOfCode")
-            url.set("https://github.com/hfhbd/adventOfCode")
+            name.set("hfhbd mavencentral")
+            description.set("hfhbd mavencentral")
+            url.set("https://github.com/hfhbd/mavencentral")
             licenses {
                 license {
                     name.set("The Apache License, Version 2.0")
@@ -34,9 +34,9 @@ publishing {
                 }
             }
             scm {
-                connection.set("scm:git://github.com/hfhbd/adventOfCode.git")
-                developerConnection.set("scm:git://github.com/hfhbd/adventOfCode.git")
-                url.set("https://github.com/hfhbd/adventOfCode")
+                connection.set("scm:git://github.com/hfhbd/mavencentral.git")
+                developerConnection.set("scm:git://github.com/hfhbd/mavencentral.git")
+                url.set("https://github.com/hfhbd/mavencentral")
             }
 
             // https://github.com/gradle/gradle/issues/28759
@@ -44,7 +44,7 @@ publishing {
                 this.asNode().appendNode("distributionManagement").appendNode("repository").apply {
                     this.appendNode("id", "github")
                     this.appendNode("name", "GitHub hfhbd Apache Maven Packages")
-                    this.appendNode("url", "https://maven.pkg.github.com/hfhbd/adventOfCode")
+                    this.appendNode("url", "https://maven.pkg.github.com/hfhbd/mavencentral")
                 }
             }
         }
