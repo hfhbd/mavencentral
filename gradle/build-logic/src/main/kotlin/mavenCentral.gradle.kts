@@ -15,8 +15,25 @@ dependencies {
     mavenCentral("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
 }
 
-val publishToMavenCentral by tasks.registering {
-    group = "publishing"
+val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
+val repoFiles = files(localMavenCentralRepoDir)
+
+val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
+    archiveFileName.set("${project.group}-${project.name}-${version}.zip")
+    from(repoFiles) {
+        exclude {
+            it.name.startsWith("maven-metadata.xml")
+        }
+    }
+    destinationDirectory.set(layout.buildDirectory.dir("mavencentral/publishing"))
+}
+
+val publishToMavenCentral by tasks.registering(PublishToMavenCentral::class) {
+    group = PublishingPlugin.PUBLISH_TASK_GROUP
+    uploadZip.set(createMavenCentralZipFile.flatMap {
+        it.archiveFile
+    })
+    workerClassPath.from(mavenCentralWorkerClassPath)
 }
 
 tasks.publish {
@@ -24,7 +41,6 @@ tasks.publish {
 }
 
 publishing {
-    val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
     val repoName = "localMavenCentral"
 
     repositories.maven {
@@ -38,40 +54,7 @@ publishing {
         val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
             PublishToMavenRepository::class.java,
-        ) {
-            val signTaskName = "sign${pubName}Publication"
-            if (signTaskName in tasks.names) {
-                dependsOn(signTaskName)
-            }
-        }
-
-        val repoFiles = files(localMavenCentralRepoDir) {
-            builtBy(publishToLocalMavenCentral)
-        }
-
-        val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile${pubName}", Zip::class) {
-            archiveFileName.set("${project.group}-${project.name}-${version}.zip")
-            from(repoFiles) {
-                exclude {
-                    it.name.startsWith("maven-metadata.xml")
-                }
-            }
-            destinationDirectory.set(layout.buildDirectory.dir("mavencentral/publishing"))
-        }
-
-        val publishToMavenCentralTask = tasks.register(
-            "publish${pubName}PublicationToMavenCentral",
-            PublishToMavenCentral::class,
-        ) {
-            group = "publishing"
-            uploadZip.set(createMavenCentralZipFile.flatMap {
-                it.archiveFile
-            })
-            workerClassPath.from(mavenCentralWorkerClassPath)
-        }
-
-        publishToMavenCentral {
-            dependsOn(publishToMavenCentralTask)
-        }
+        )
+        repoFiles.builtBy(publishToLocalMavenCentral)
     }
 }
