@@ -11,7 +11,11 @@ val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerC
 }
 
 dependencies {
-    mavenCentralWorker("io.github.hfhbd.mavencentral:runtime:$VERSION")
+    mavenCentralWorker(centralApi)
+    mavenCentralWorker(ktorJava)
+    mavenCentralWorker(ktorLogging)
+    mavenCentralWorker(ktorContent)
+    mavenCentralWorker(ktorJson)
 }
 
 val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
