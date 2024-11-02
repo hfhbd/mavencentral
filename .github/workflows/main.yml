@@ -25,6 +25,6 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.CC }}
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew :runtime:dependencies
       - name: Release maven artifacts to local repo
         run: ./gradlew createMavenCentralZipFile
