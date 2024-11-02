@@ -30,5 +30,4 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 include(":central-api")
-include(":runtime")
 include(":gradle-plugin")
