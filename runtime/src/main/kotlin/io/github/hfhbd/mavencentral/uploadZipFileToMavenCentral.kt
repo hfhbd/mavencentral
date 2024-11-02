@@ -66,9 +66,9 @@ suspend fun uploadZipFileToMavenCentral(
         when (status.deploymentState) {
             DeploymentResponseFilesDeploymentState.Pending,
             DeploymentResponseFilesDeploymentState.Validating,
-            DeploymentResponseFilesDeploymentState.Validated,
                 -> continue
 
+            DeploymentResponseFilesDeploymentState.Validated,
             DeploymentResponseFilesDeploymentState.Publishing,
             DeploymentResponseFilesDeploymentState.Published,
                 -> break
