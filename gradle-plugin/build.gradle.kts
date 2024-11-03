@@ -24,10 +24,10 @@ tasks.validatePlugins {
 
 val storeVersion by tasks.registering(StoreVersion::class) {
     version.put("centralApi", "${project.group}:central-api:${project.version}")
-    version.put("ktorJava", libs.ktor.client.java.toString())
-    version.put("ktorLogging", libs.ktor.client.logging.toString())
-    version.put("ktorContent", libs.ktor.client.content.negotiation.toString())
-    version.put("ktorJson", libs.ktor.serialization.kotlinx.json.toString())
+    version.put("ktorJava", libs.ktor.client.java.get().toString())
+    version.put("ktorLogging", libs.ktor.client.logging.get().toString())
+    version.put("ktorContent", libs.ktor.client.content.negotiation.get().toString())
+    version.put("ktorJson", libs.ktor.serialization.kotlinx.json.get().toString())
 }
 
 sourceSets.main {
