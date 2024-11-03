@@ -23,7 +23,7 @@ tasks.validatePlugins {
 }
 
 val storeVersion by tasks.registering(StoreVersion::class) {
-    version.put("centralApi", "${group}:central-api:${version}")
+    version.put("centralApi", "${project.group}:central-api:${project.version}")
     version.put("ktorJava", libs.ktor.client.java.toString())
     version.put("ktorLogging", libs.ktor.client.logging.toString())
     version.put("ktorContent", libs.ktor.client.content.negotiation.toString())
