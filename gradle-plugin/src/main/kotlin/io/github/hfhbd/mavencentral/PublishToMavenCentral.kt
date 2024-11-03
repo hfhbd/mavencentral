@@ -4,21 +4,16 @@ import DeploymentResponseFilesDeploymentState
 import auth.BearerAuthAuth
 import client.checkStatus
 import client.uploadComponents
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.java.Java
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.bearerAuth
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.forms.append
-import io.ktor.client.request.forms.formData
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType.Application
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.encodeBase64
+import io.ktor.client.*
+import io.ktor.client.engine.java.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.ContentType.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.util.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.asSource
@@ -26,7 +21,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.logging.Logging as GradleLogging
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
@@ -37,6 +31,7 @@ import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
+import org.gradle.api.logging.Logging as GradleLogging
 
 @DisableCachingByDefault
 abstract class PublishToMavenCentral : DefaultTask() {
@@ -115,6 +110,7 @@ internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParamete
                     transferFrom(zipFile.inputStream().asSource())
                 }
             }))
+            parameter("publishingType", "AUTOMATIC")
         }
         while (true) {
             delay(1.seconds)
