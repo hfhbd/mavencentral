@@ -4,18 +4,13 @@ on:
   release:
     types: [ created ]
 
-concurrency:
-  group: release
-  cancel-in-progress: false
-
 jobs:
   publish:
+    concurrency:
+      group: release
+      cancel-in-progress: false
+
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-      attestations: write
 
     environment: CD
 
@@ -28,27 +23,39 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
-      - name: Release maven artifacts to local repo
-        run: ./gradlew -Pversion=$version createMavenCentralZipFile
-        env:
-          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
-          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
       - name: Release maven artifacts
-        run: ./gradlew -Pversion=$version publish
+        run: ./gradlew -Pversion=${{ env.version }} publishToMavenCentral
         env:
-          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
-          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PASSWORD }}
+
+  publishGitHubPackages:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Set environment for version
+        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Release maven artifacts
+        run: ./gradlew -Pversion=${{ env.version }} publishAllPublicationsToGitHubPackagesRepository
+        env:
+          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
       - name: Write outputs
         id: publications
-        run: ./gradlew :writePublicationsToGitHubOutput -Pversion=$version
+        run: ./gradlew :writePublicationsToGitHubOutput -Pversion=${{ env.version }}
       - uses: actions/attest-build-provenance@v2
         with:
           subject-path: ${{ steps.publications.outputs.publishedFiles }}
