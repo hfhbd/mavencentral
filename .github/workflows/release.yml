@@ -49,6 +49,6 @@ jobs:
       - name: Write outputs
         id: publications
         run: ./gradlew :writePublicationsToGitHubOutput -Pversion=$version
-      - uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v2
         with:
           subject-path: ${{ steps.publications.outputs.publishedFiles }}
