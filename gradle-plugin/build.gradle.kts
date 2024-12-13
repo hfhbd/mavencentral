@@ -3,7 +3,7 @@ plugins {
     id("setup")
 }
 
-kotlin.jvmToolchain(11)
+kotlin.jvmToolchain(17)
 
 java {
     withJavadocJar()
@@ -44,7 +44,7 @@ configurations.configureEach {
         attributes {
             attribute(
                 GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
-                objects.named(GradleVersion.version("8.11").version)
+                objects.named(GradleVersion.current().version)
             )
         }
     }
