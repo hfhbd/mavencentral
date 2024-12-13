@@ -18,11 +18,15 @@ dependencies {
     mavenCentralWorker(ktorJson)
 }
 
-val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/${version}/repo")
+val projectGroup = group
+val projectName = name
+val projectVersion = version
+
+val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/$projectVersion/repo")
 val repoFiles = files(localMavenCentralRepoDir)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
-    archiveFileName.set("${project.group}-${project.name}-${version}.zip")
+    archiveFileName.set("$projectGroup-$projectName-$projectVersion.zip")
     from(repoFiles) {
         exclude {
             it.name.startsWith("maven-metadata.xml")
@@ -56,7 +60,6 @@ publishing {
 
         val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
-            PublishToMavenRepository::class.java,
         )
         repoFiles.builtBy(publishToLocalMavenCentral)
     }
