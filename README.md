@@ -17,7 +17,7 @@ pluginManagement {
 
 ## Usage
 
-Install the plugin in each project.
+Apply the plugin in each project.
 
 ```kotlin
 // build.gradle (.kts)
@@ -29,4 +29,4 @@ plugins {
 You need to setup and configure the publications using the core `maven-publish` and `signing` plugins.
 
 To publish the publications, call `./gradlew publishToMavenCentral -PmavenCentralUsername=MYUSERNAME -PmavenCentralPassword=MYSECRETPASSWORD`.
-Publishing uses the default automatic behavior.
+Publishing uses the automatic behavior.
