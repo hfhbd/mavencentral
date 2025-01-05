@@ -5,8 +5,8 @@ plugins {
 
 kotlin.jvmToolchain(8)
 
-dependencies {
-    testImplementation(kotlin("test"))
+testing.suites.named<JvmTestSuite>("test") {
+    useKotlinTest()
 }
 
 java {
