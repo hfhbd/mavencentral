@@ -16,7 +16,8 @@ jobs:
 
     steps:
       - name: Set environment for version
-        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_ENV
+        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_OUTPUT
+        id: version
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -24,7 +25,7 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
       - name: Release maven artifacts
-        run: ./gradlew -Pversion=${{ env.version }} publishToMavenCentral
+        run: ./gradlew -Pversion=${{ steps.version.outputs.version }} publishToMavenCentral
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
@@ -41,7 +42,8 @@ jobs:
 
     steps:
       - name: Set environment for version
-        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_ENV
+        run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_OUTPUT
+        id: version
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -49,13 +51,13 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
       - name: Release maven artifacts
-        run: ./gradlew -Pversion=${{ env.version }} publishAllPublicationsToGitHubPackagesRepository
+        run: ./gradlew -Pversion=${{ steps.version.outputs.version }} publishAllPublicationsToGitHubPackagesRepository
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
       - name: Write outputs
         id: publications
-        run: ./gradlew :writePublicationsToGitHubOutput -Pversion=${{ env.version }}
+        run: ./gradlew :writePublicationsToGitHubOutput -Pversion=${{ steps.version.outputs.version }}
       - uses: actions/attest-build-provenance@v2
         with:
           subject-path: ${{ steps.publications.outputs.publishedFiles }}
