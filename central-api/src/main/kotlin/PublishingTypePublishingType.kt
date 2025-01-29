@@ -7,4 +7,7 @@ public enum class PublishingTypePublishingType {
   UserManaged,
   @SerialName(value = "AUTOMATIC")
   Automatic,
+  ;
+
+  override fun toString(): String = serializer().descriptor.getElementName(ordinal)
 }

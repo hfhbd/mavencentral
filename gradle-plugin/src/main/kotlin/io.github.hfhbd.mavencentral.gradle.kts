@@ -14,19 +14,21 @@ dependencies {
     mavenCentralWorker(centralApi)
     mavenCentralWorker(ktorJava)
     mavenCentralWorker(ktorLogging)
-    mavenCentralWorker(ktorContent)
-    mavenCentralWorker(ktorJson)
 }
 
-val projectGroup = group
-val projectName = name
-val projectVersion = version
+val projectGroup = provider { group }
+val projectName = provider { name }
+val projectVersion = provider { version }
 
 val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/$projectVersion/repo")
 val repoFiles = files(localMavenCentralRepoDir)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
-    archiveFileName.set("$projectGroup-$projectName-$projectVersion.zip")
+    archiveFileName.set(projectGroup.zip(projectName) { projectGroup, projectName ->
+        "$projectGroup-$projectName"
+    }.zip(projectVersion) { ga, projectVersion ->
+        "$ga-$projectVersion.zip"
+    })
     from(repoFiles) {
         exclude {
             it.name.startsWith("maven-metadata.xml")

@@ -3,7 +3,7 @@ plugins {
     id("setup")
 }
 
-kotlin.jvmToolchain(17)
+kotlin.jvmToolchain(21)
 
 java {
     withJavadocJar()
@@ -12,10 +12,23 @@ java {
 
 dependencies {
     compileOnly(projects.centralApi)
+
     compileOnly(libs.ktor.client.java)
     compileOnly(libs.ktor.client.logging)
-    compileOnly(libs.ktor.client.content.negotiation)
-    compileOnly(libs.ktor.serialization.kotlinx.json)
+
+    testFixturesApi(testFixtures(projects.centralApi))
+    testFixturesApi(libs.ktor.server.test.host)
+}
+
+testing.suites {
+    withType(JvmTestSuite::class).configureEach {
+        useKotlinTest()
+    }
+    named("test", JvmTestSuite::class) {
+        dependencies {
+            implementation(libs.ktor.client.logging)
+        }
+    }
 }
 
 tasks.validatePlugins {
@@ -23,11 +36,11 @@ tasks.validatePlugins {
 }
 
 val storeVersion by tasks.registering(StoreVersion::class) {
-    version.put("centralApi", "${project.group}:central-api:${project.version}")
+    version.put("centralApi", provider { project.group }.zip(provider { project.version }) { group, version ->
+        "$group:central-api:$version"
+    })
     version.put("ktorJava", libs.ktor.client.java.get().toString())
     version.put("ktorLogging", libs.ktor.client.logging.get().toString())
-    version.put("ktorContent", libs.ktor.client.content.negotiation.get().toString())
-    version.put("ktorJson", libs.ktor.serialization.kotlinx.json.get().toString())
 }
 
 sourceSets.main {

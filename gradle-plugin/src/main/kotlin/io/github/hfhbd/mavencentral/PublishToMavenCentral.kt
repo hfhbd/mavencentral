@@ -5,6 +5,7 @@ import auth.BearerAuthAuth
 import client.checkStatus
 import client.uploadComponents
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.java.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -16,6 +17,7 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.RawSource
 import kotlinx.io.asSource
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.repositories.PasswordCredentials
@@ -30,6 +32,7 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import org.gradle.api.logging.Logging as GradleLogging
 
@@ -71,24 +74,20 @@ internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParamete
 
     private val gradleLogger = GradleLogging.getLogger(PublishWorker::class.java)
 
-    override fun execute(): Unit = runBlocking {
-        val zipFile = this@PublishWorker.parameters.uploadZip.asFile.get()
+    override fun execute() {
         val client = HttpClient(Java) {
-            expectSuccess = true
             defaultRequest {
                 url("https://central.sonatype.com")
             }
-            BearerAuthAuth("${parameters.userName.get()}:${parameters.password.get()}".encodeBase64())
-            install(ContentNegotiation) {
-                json()
-            }
+            configureMavenCentral(userName = parameters.userName.get(), password = parameters.password.get())
+
             install(Logging) {
                 level = if (gradleLogger.isDebugEnabled) {
                     LogLevel.ALL
                 } else {
                     LogLevel.INFO
                 }
-                this.logger = object : Logger {
+                logger = object : Logger {
                     override fun log(message: String) {
                         if (gradleLogger.isDebugEnabled) {
                             gradleLogger.debug(message)
@@ -99,34 +98,63 @@ internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParamete
                 }
             }
         }
-        val deploymentId = client.uploadComponents {
-            setBody(MultiPartFormDataContent(formData {
-                append(
-                    key = "bundle",
-                    filename = zipFile.name,
-                    contentType = Application.OctetStream,
-                    size = zipFile.length(),
-                ) {
-                    transferFrom(zipFile.inputStream().asSource())
-                }
-            }))
-            parameter("publishingType", "AUTOMATIC")
+        val uploadFile = parameters.uploadZip.asFile.get()
+        runBlocking {
+            client.uploadToMavenCentral(
+                zipFileName = uploadFile.name,
+                zipFileSize = uploadFile.length(),
+                zipFileStream = uploadFile.inputStream().asSource(),
+                delay = 1.seconds,
+            )
         }
-        while (true) {
-            delay(1.seconds)
-            val status = client.checkStatus(id = deploymentId)!!
-            when (status.deploymentState) {
-                DeploymentResponseFilesDeploymentState.Pending,
-                DeploymentResponseFilesDeploymentState.Validating,
-                    -> continue
+    }
+}
 
-                DeploymentResponseFilesDeploymentState.Validated,
-                DeploymentResponseFilesDeploymentState.Publishing,
-                DeploymentResponseFilesDeploymentState.Published,
-                    -> break
+internal fun <T : HttpClientEngineConfig> HttpClientConfig<T>.configureMavenCentral(
+    userName: String,
+    password: String,
+) {
+    expectSuccess = true
+    BearerAuthAuth("$userName:$password".encodeBase64())
+    install(ContentNegotiation) {
+        jsonIo()
+    }
+}
 
-                DeploymentResponseFilesDeploymentState.Failed -> error(status.errors)
+internal suspend fun HttpClient.uploadToMavenCentral(
+    zipFileName: String,
+    zipFileSize: Long,
+    zipFileStream: RawSource,
+    delay: Duration,
+) {
+    val deploymentId = uploadComponents(
+        publishingType = PublishingTypePublishingType.Automatic,
+    ) {
+        setBody(MultiPartFormDataContent(formData {
+            append(
+                key = "bundle",
+                filename = zipFileName,
+                contentType = Application.OctetStream,
+                size = zipFileSize,
+            ) {
+                transferFrom(zipFileStream)
             }
+        }))
+    }
+    while (true) {
+        delay(delay)
+        val status = checkStatus(id = deploymentId)!!
+        when (status.deploymentState) {
+            DeploymentResponseFilesDeploymentState.Pending,
+            DeploymentResponseFilesDeploymentState.Validating,
+                -> continue
+
+            DeploymentResponseFilesDeploymentState.Validated,
+            DeploymentResponseFilesDeploymentState.Publishing,
+            DeploymentResponseFilesDeploymentState.Published,
+                -> break
+
+            DeploymentResponseFilesDeploymentState.Failed -> error(status.errors)
         }
     }
 }
