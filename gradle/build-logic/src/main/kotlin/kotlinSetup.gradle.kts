@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("setup")
+    kotlin("plugin.serialization")
 }
 
 kotlin.jvmToolchain(8)

@@ -34,7 +34,7 @@ jobs:
           languages: kotlin
 
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: ./gradlew --no-build-cache classes
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
