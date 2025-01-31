@@ -6,12 +6,6 @@ val subPublicationFiles = configurations.resolvable("publicationFiles") {
     }
 }
 
-dependencies {
-    for (p in subprojects) {
-        publications(p)
-    }
-}
-
 tasks.register("writePublicationsToGithubOutputFile", WritePublicationsToGitHubOutputFile::class) {
     publicationFiles.from(subPublicationFiles)
     rootDirectory.set(layout.projectDirectory)

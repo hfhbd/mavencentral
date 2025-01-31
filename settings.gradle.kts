@@ -31,3 +31,11 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 include(":central-api")
 include(":gradle-plugin")
+
+gradle.lifecycle.afterProject {
+    if (project != rootProject && project.pluginManager.hasPlugin("maven-publish")) {
+        rootProject.dependencies {
+            "publications".invoke(project)
+        }
+    }
+}
