@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.1.10"
-ktor = "3.0.3"
+ktor = "3.1.0"
 
 [libraries]
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.8.0" }
