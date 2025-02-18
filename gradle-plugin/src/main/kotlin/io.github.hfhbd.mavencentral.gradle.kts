@@ -16,11 +16,11 @@ dependencies {
     mavenCentralWorker(ktorLogging)
 }
 
-val projectGroup = provider { group }
+val projectGroup = provider { group.toString() }
 val projectName = provider { name }
-val projectVersion = provider { version }
+val projectVersion = provider { version.toString() }
 
-val localMavenCentralRepoDir = layout.buildDirectory.dir("mavencentral/$projectVersion/repo")
+val localMavenCentralRepoDir = projectVersion.flatMap { layout.buildDirectory.dir("mavencentral/$it/repo") }
 val repoFiles = files(localMavenCentralRepoDir)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
