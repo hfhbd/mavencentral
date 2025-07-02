@@ -15,18 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-      - name: Cache build logic
-        uses: actions/cache@v4
-        with:
-          path: gradle/build-logic/build
-          key: build-logic-${{ hashFiles('gradle/build-logic/src/**', 'gradle/build-logic/build.gradle.kts','gradle/build-logic/settings.gradle.kts') }}
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-encryption-key: ${{ secrets.CC }}
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
