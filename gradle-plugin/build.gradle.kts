@@ -52,13 +52,11 @@ gradlePlugin.plugins.configureEach {
     description = "hfhbd mavencentral Gradle Plugin"
 }
 
-configurations.configureEach {
-    if (isCanBeConsumed) {
-        attributes {
-            attribute(
-                GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
-                objects.named(GradleVersion.current().version)
-            )
-        }
+configurations.apiElements {
+    attributes {
+        attribute(
+            GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+            objects.named(GradleVersion.current().version)
+        )
     }
 }
