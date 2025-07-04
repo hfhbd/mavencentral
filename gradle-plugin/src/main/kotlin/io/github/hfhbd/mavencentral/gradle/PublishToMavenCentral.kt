@@ -1,9 +1,10 @@
-package io.github.hfhbd.mavencentral
+package io.github.hfhbd.mavencentral.gradle
 
-import DeploymentResponseFilesDeploymentState
-import auth.BearerAuthAuth
-import client.checkStatus
-import client.uploadComponents
+import io.github.hfhbd.mavencentral.api.DeploymentState
+import io.github.hfhbd.mavencentral.api.PublishingTypePublishingType
+import io.github.hfhbd.mavencentral.api.auth.BearerAuthAuth
+import io.github.hfhbd.mavencentral.api.client.checkStatus
+import io.github.hfhbd.mavencentral.api.client.uploadComponents
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.java.*
@@ -13,6 +14,7 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.ContentType.*
+import io.ktor.http.ContentType.Text.Plain
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
 import kotlinx.coroutines.delay
@@ -140,21 +142,22 @@ internal suspend fun HttpClient.uploadToMavenCentral(
                 transferFrom(zipFileStream)
             }
         }))
+        accept(Plain)
     }
     while (true) {
         delay(delay)
         val status = checkStatus(id = deploymentId)!!
         when (status.deploymentState) {
-            DeploymentResponseFilesDeploymentState.Pending,
-            DeploymentResponseFilesDeploymentState.Validating,
+            DeploymentState.Pending,
+            DeploymentState.Validating,
                 -> continue
 
-            DeploymentResponseFilesDeploymentState.Validated,
-            DeploymentResponseFilesDeploymentState.Publishing,
-            DeploymentResponseFilesDeploymentState.Published,
+            DeploymentState.Validated,
+            DeploymentState.Publishing,
+            DeploymentState.Published,
                 -> break
 
-            DeploymentResponseFilesDeploymentState.Failed -> error(status.errors)
+            DeploymentState.Failed -> error(status.errors!!)
         }
     }
 }

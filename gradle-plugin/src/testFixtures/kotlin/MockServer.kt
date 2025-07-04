@@ -1,3 +1,5 @@
+package io.github.hfhbd.mavencentral.gradle
+
 import io.ktor.http.content.PartData
 import io.ktor.serialization.kotlinx.json.jsonIo
 import io.ktor.server.application.Application
@@ -6,9 +8,10 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.routing.routing
 import io.ktor.server.util.getValue
-import kotlinx.serialization.json.JsonObject
-import server.checkStatus
-import server.uploadComponents
+import io.github.hfhbd.mavencentral.api.server.checkStatus
+import io.github.hfhbd.mavencentral.api.server.uploadComponents
+import io.github.hfhbd.mavencentral.api.DeploymentState
+import io.github.hfhbd.mavencentral.api.CheckStatus
 import kotlin.test.assertEquals
 
 fun Application.mavenCentral() {
@@ -26,18 +29,18 @@ fun Application.mavenCentral() {
             DEPLOYMENT_ID
         }
 
-        var status = DeploymentResponseFilesDeploymentState.Pending
+        var status = DeploymentState.Pending
         checkStatus {
             val id: String by parameters
             assertEquals(DEPLOYMENT_ID, id)
 
             status = when (status) {
-                DeploymentResponseFilesDeploymentState.Pending -> DeploymentResponseFilesDeploymentState.Validating
-                DeploymentResponseFilesDeploymentState.Validating -> DeploymentResponseFilesDeploymentState.Validated
-                DeploymentResponseFilesDeploymentState.Validated -> DeploymentResponseFilesDeploymentState.Published
-                DeploymentResponseFilesDeploymentState.Publishing -> DeploymentResponseFilesDeploymentState.Published
-                DeploymentResponseFilesDeploymentState.Published -> DeploymentResponseFilesDeploymentState.Published
-                DeploymentResponseFilesDeploymentState.Failed -> DeploymentResponseFilesDeploymentState.Failed
+                DeploymentState.Pending -> DeploymentState.Validating
+                DeploymentState.Validating -> DeploymentState.Validated
+                DeploymentState.Validated -> DeploymentState.Published
+                DeploymentState.Publishing -> DeploymentState.Published
+                DeploymentState.Published -> DeploymentState.Published
+                DeploymentState.Failed -> DeploymentState.Failed
             }
 
             CheckStatus(
@@ -45,7 +48,7 @@ fun Application.mavenCentral() {
                 deploymentId = id,
                 deploymentName = "Test deployment",
                 cherryBomUrl = null,
-                errors = JsonObject(emptyMap()),
+                errors = emptyMap(),
                 purls = emptyList(),
             )
         }

@@ -459,7 +459,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "examples": {
+                  "example": {
                     "Published": {
                       "summary": "Published status response example",
                       "value": {
@@ -518,7 +518,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/CheckStatus"
                 },
                 "examples": {
                   "deployment": {
@@ -646,6 +646,43 @@
       }
     },
     "schemas": {
+      "CheckStatus": {
+        "type": "object",
+        "required": [
+          "deploymentId",
+          "deploymentName",
+          "deploymentState"
+        ],
+        "properties": {
+          "deploymentId": {
+            "type": "string"
+          },
+          "deploymentName": {
+            "type": "string"
+          },
+          "deploymentState": {
+            "$ref": "#/components/schemas/DeploymentState"
+          },
+          "purls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cherryBomUrl": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "DeployedFileDTO": {
         "type": "object",
         "properties": {
@@ -677,6 +714,12 @@
             "items": {
               "type": "string"
             }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -690,14 +733,7 @@
             "type": "string"
           },
           "deploymentState": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "VALIDATING",
-              "PUBLISHING",
-              "PUBLISHED",
-              "FAILED"
-            ]
+            "$ref": "#/components/schemas/DeploymentState"
           },
           "deploymentType": {
             "type": "string",
@@ -722,6 +758,17 @@
             }
           }
         }
+      },
+      "DeploymentState": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "VALIDATING",
+          "VALIDATED",
+          "PUBLISHING",
+          "PUBLISHED",
+          "FAILED"
+        ]
       }
     }
   }

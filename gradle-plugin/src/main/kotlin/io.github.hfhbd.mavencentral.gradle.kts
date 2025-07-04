@@ -1,4 +1,4 @@
-import io.github.hfhbd.mavencentral.*
+import io.github.hfhbd.mavencentral.gradle.*
 
 plugins {
     id("maven-publish")
@@ -13,6 +13,8 @@ val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerC
 dependencies {
     mavenCentralWorker(centralApi)
     mavenCentralWorker(ktorJava)
+    mavenCentralWorker(ktorClientContentNegotiation)
+    mavenCentralWorker(ktorSerializationKotlinxJson)
     mavenCentralWorker(ktorLogging)
 }
 
@@ -57,12 +59,12 @@ publishing {
         url = uri(localMavenCentralRepoDir)
     }
 
-    publications.withType<MavenPublication>().all {
+    val publishToLocalMavenCentral = publications.withType<MavenPublication>().map {
         val pubName = name.replaceFirstChar { it.uppercaseChar() }
 
-        val publishToLocalMavenCentral = tasks.named(
+        tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
         )
-        repoFiles.builtBy(publishToLocalMavenCentral)
     }
+    repoFiles.builtBy(publishToLocalMavenCentral)
 }
