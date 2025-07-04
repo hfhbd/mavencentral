@@ -48,7 +48,6 @@ val storeVersion by tasks.registering(StoreVersion::class) {
     version.put("ktorJava", libs.ktor.client.java.get().toString())
     version.put("ktorSerializationKotlinxJson", libs.ktor.client.java.get().toString())
     version.put("ktorClientContentNegotiation", libs.ktor.client.java.get().toString())
-    version.put("ktorJava", libs.ktor.client.java.get().toString())
     version.put("ktorLogging", libs.ktor.client.logging.get().toString())
 }
 
