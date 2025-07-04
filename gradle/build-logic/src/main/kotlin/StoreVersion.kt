@@ -20,7 +20,7 @@ abstract class StoreVersion : DefaultTask() {
     fun action() {
         File(outputDirectory.get().asFile, "Version.kt").writeText(
             version.get().entries.joinToString(
-                prefix = "package io.github.hfhbd.mavencentral\n",
+                prefix = "package io.github.hfhbd.mavencentral.gradle\n",
                 separator = "\n",
                 postfix = "\n",
             ) { (name, gav) ->

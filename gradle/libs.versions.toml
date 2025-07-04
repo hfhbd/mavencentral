@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.2.0"
-ktor = "3.2.0"
+ktor = "3.2.1"
+mavencentral = "0.0.17"
 
 [libraries]
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
@@ -15,7 +16,10 @@ ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 
+central-api = { module = "io.github.hfhbd.mavencentral:central-api", version.ref = "mavencentral"}
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
+mavencentral = { id = "io.github.hfhbd.mavencentral", version.ref = "mavencentral" }
+kfx = { id = "io.github.hfhbd.kfx", version = "0.0.8" }
