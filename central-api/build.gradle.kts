@@ -42,3 +42,10 @@ kfx {
         }
     }
 }
+
+configurations.mavenCentralWorker {
+    resolutionStrategy.dependencySubstitution {
+        substitute(project(projects.centralApi.path))
+            .using(module(libs.central.api.get().toString()))
+    }
+}
