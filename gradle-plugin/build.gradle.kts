@@ -69,7 +69,7 @@ configurations.apiElements {
     }
 }
 
-configurations.mavenCentralWorker {
+configurations.mavenCentralWorkerClasspath {
     resolutionStrategy.dependencySubstitution {
         substitute(project(projects.centralApi.path))
             .using(module(libs.central.api.get().toString()))
