@@ -22,4 +22,4 @@ central-api = { module = "io.github.hfhbd.mavencentral:central-api", version.ref
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version.ref = "mavencentral" }
-kfx = { id = "io.github.hfhbd.kfx", version = "0.0.9" }
+kfx = { id = "io.github.hfhbd.kfx", version = "0.0.10" }
