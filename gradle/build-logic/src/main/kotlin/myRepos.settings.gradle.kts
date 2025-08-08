@@ -11,7 +11,6 @@ develocity {
         publishing {
             onlyIf { isCI }
         }
-        tag("CI")
     }
 }
 
