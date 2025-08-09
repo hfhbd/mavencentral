@@ -7,7 +7,11 @@ import java.io.*
 @CacheableTask
 abstract class StoreVersion : DefaultTask() {
     @get:Input
-    abstract val version: MapProperty<String, String>
+    abstract val version: Property<String>
+
+    init {
+        version.set(project.provider { project.version.toString() })
+    }
 
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
@@ -19,13 +23,9 @@ abstract class StoreVersion : DefaultTask() {
     @TaskAction
     fun action() {
         File(outputDirectory.get().asFile, "Version.kt").writeText(
-            version.get().entries.joinToString(
-                prefix = "package io.github.hfhbd.mavencentral.gradle\n",
-                separator = "\n",
-                postfix = "\n",
-            ) { (name, gav) ->
-                "public const val $name = \"$gav\""
-            }
+            """package io.github.hfhbd.mavencentral.gradle
+public const val VERSION = "${version.get()}"
+"""
         )
     }
 }

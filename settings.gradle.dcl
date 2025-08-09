@@ -15,5 +15,5 @@ rootProject.name = "mavencentral"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
-include(":central-api")
 include(":gradle-plugin")
+include(":gradle-worker")

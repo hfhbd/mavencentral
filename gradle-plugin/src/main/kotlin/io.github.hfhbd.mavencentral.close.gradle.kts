@@ -1,17 +1,15 @@
-import io.github.hfhbd.mavencentral.gradle.ktorJava
-import io.github.hfhbd.mavencentral.gradle.ktorLogging
+import io.github.hfhbd.mavencentral.gradle.*
 
 val deps = configurations.dependencyScope("mavenCentralClosing")
 
 dependencies {
-    deps(ktorJava)
-    deps(ktorLogging)
+    deps("io.github.hfhbd.mavencentral:gradle-worker:$VERSION")
 }
 
 val classpath = configurations.resolvable("mavenCentralClosingClasspath") {
     extendsFrom(deps.get())
 }
 
-tasks.register("closeMavenCentral", io.github.hfhbd.mavencentral.gradle.CloseMavenCentral::class) {
+tasks.register("closeMavenCentral", CloseMavenCentral::class) {
     workerClassPath.from(classpath)
 }

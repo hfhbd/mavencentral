@@ -1,4 +1,7 @@
 package io.github.hfhbd.mavencentral.gradle
+
+import io.github.hfhbd.mavencentral.gradle.workactions.configureMavenCentral
+import io.github.hfhbd.mavencentral.gradle.workactions.uploadToMavenCentral
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
