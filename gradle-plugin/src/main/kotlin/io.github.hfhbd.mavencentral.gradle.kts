@@ -53,12 +53,12 @@ publishing {
         url = uri(localMavenCentralRepoDir)
     }
 
-    val publishToLocalMavenCentral = publications.withType<MavenPublication>().map {
+    publications.withType<MavenPublication>().all {
         val pubName = name.replaceFirstChar { it.uppercaseChar() }
 
-        tasks.named(
+        val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
         )
+        repoFiles.builtBy(publishToLocalMavenCentral)
     }
-    repoFiles.builtBy(publishToLocalMavenCentral)
 }

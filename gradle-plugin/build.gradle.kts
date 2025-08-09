@@ -15,3 +15,9 @@ gradlePlugin.plugins.configureEach {
 tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
+
+val storeVersion by tasks.registering(StoreVersion::class)
+
+sourceSets.main {
+    kotlin.srcDir(storeVersion)
+}

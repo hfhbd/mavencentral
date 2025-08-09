@@ -1,12 +1,13 @@
 import io.github.hfhbd.kfx.openapi.OpenApi
 
 plugins {
-    `kotlin-dsl`
     id("setup")
     id("io.github.hfhbd.kfx")
 }
 
 dependencies {
+    api(gradleApi())
+
     api(libs.ktor.client.core)
     api(libs.ktor.client.logging)
     api(libs.serialization.json)
@@ -18,12 +19,6 @@ dependencies {
     testFixturesImplementation(libs.ktor.server.core)
     testFixturesImplementation(libs.ktor.server.content.negotiation)
     testFixturesImplementation(kotlin("test-junit5"))
-}
-
-val storeVersion by tasks.registering(StoreVersion::class)
-
-sourceSets.main {
-    kotlin.srcDir(storeVersion)
 }
 
 kfx {
@@ -61,8 +56,4 @@ testing.suites.named("test", JvmTestSuite::class) {
     dependencies {
         implementation(libs.ktor.server.test.host)
     }
-}
-
-tasks.validatePlugins {
-    enableStricterValidation.set(true)
 }
