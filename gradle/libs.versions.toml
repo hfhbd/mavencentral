@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.2.0"
-ktor = "3.2.2"
+ktor = "3.2.3"
 mavencentral = "0.0.17"
 
 [libraries]
