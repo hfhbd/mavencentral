@@ -11,25 +11,19 @@ val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerC
 }
 
 dependencies {
-    mavenCentralWorker(centralApi)
-    mavenCentralWorker(ktorJava)
-    mavenCentralWorker(ktorClientContentNegotiation)
-    mavenCentralWorker(ktorSerializationKotlinxJson)
-    mavenCentralWorker(ktorLogging)
+    mavenCentralWorker("io.github.hfhbd.mavencentral:gradle-worker:$VERSION")
 }
 
 val projectGroup = provider { group.toString() }
-val projectName = provider { name }
+val projectName = name
 val projectVersion = provider { version.toString() }
 
 val localMavenCentralRepoDir = projectVersion.flatMap { layout.buildDirectory.dir("mavencentral/$it/repo") }
 val repoFiles = files(localMavenCentralRepoDir)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
-    archiveFileName.set(projectGroup.zip(projectName) { projectGroup, projectName ->
-        "$projectGroup-$projectName"
-    }.zip(projectVersion) { ga, projectVersion ->
-        "$ga-$projectVersion.zip"
+    archiveFileName.set(projectGroup.zip(projectVersion) { projectGroup, projectVersion ->
+        "$projectGroup-$projectName-$projectVersion.zip"
     })
     from(repoFiles) {
         exclude {
@@ -59,12 +53,12 @@ publishing {
         url = uri(localMavenCentralRepoDir)
     }
 
-    val publishToLocalMavenCentral = publications.withType<MavenPublication>().map {
+    publications.withType<MavenPublication>().all {
         val pubName = name.replaceFirstChar { it.uppercaseChar() }
 
-        tasks.named(
+        val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
         )
+        repoFiles.builtBy(publishToLocalMavenCentral)
     }
-    repoFiles.builtBy(publishToLocalMavenCentral)
 }

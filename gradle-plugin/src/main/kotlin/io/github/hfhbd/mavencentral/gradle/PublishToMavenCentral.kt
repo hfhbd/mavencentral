@@ -1,42 +1,16 @@
 package io.github.hfhbd.mavencentral.gradle
 
-import io.github.hfhbd.mavencentral.api.DeploymentState
-import io.github.hfhbd.mavencentral.api.PublishingTypePublishingType
-import io.github.hfhbd.mavencentral.api.auth.BearerAuthAuth
-import io.github.hfhbd.mavencentral.api.client.checkStatus
-import io.github.hfhbd.mavencentral.api.client.uploadComponents
-import io.ktor.client.*
-import io.ktor.client.engine.*
-import io.ktor.client.engine.java.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.http.ContentType.*
-import io.ktor.http.ContentType.Text.Plain
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import kotlinx.io.RawSource
-import kotlinx.io.asSource
+import io.github.hfhbd.mavencentral.gradle.workactions.PublishWorker
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.credentials
 import org.gradle.work.DisableCachingByDefault
-import org.gradle.workers.WorkAction
-import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
-import org.gradle.api.logging.Logging as GradleLogging
 
 @DisableCachingByDefault
 abstract class PublishToMavenCentral : DefaultTask() {
@@ -63,101 +37,6 @@ abstract class PublishToMavenCentral : DefaultTask() {
             this.uploadZip.set(this@PublishToMavenCentral.uploadZip)
             this.userName.set(this@PublishToMavenCentral.credentials.map { it.username })
             this.password.set(this@PublishToMavenCentral.credentials.map { it.password })
-        }
-    }
-}
-
-internal abstract class PublishWorker : WorkAction<PublishWorker.PublishParameters> {
-    interface PublishParameters : WorkParameters {
-        val uploadZip: RegularFileProperty
-        val userName: Property<String>
-        val password: Property<String>
-    }
-
-    private val gradleLogger = GradleLogging.getLogger(PublishWorker::class.java)
-
-    override fun execute() {
-        val client = HttpClient(Java) {
-            defaultRequest {
-                url("https://central.sonatype.com")
-            }
-            configureMavenCentral(userName = parameters.userName.get(), password = parameters.password.get())
-
-            install(Logging) {
-                level = if (gradleLogger.isDebugEnabled) {
-                    LogLevel.ALL
-                } else {
-                    LogLevel.INFO
-                }
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        if (gradleLogger.isDebugEnabled) {
-                            gradleLogger.debug(message)
-                        } else {
-                            gradleLogger.info(message)
-                        }
-                    }
-                }
-            }
-        }
-        val uploadFile = parameters.uploadZip.asFile.get()
-        runBlocking {
-            client.uploadToMavenCentral(
-                zipFileName = uploadFile.name,
-                zipFileSize = uploadFile.length(),
-                zipFileStream = uploadFile.inputStream().asSource(),
-                delay = 1.seconds,
-            )
-        }
-    }
-}
-
-internal fun <T : HttpClientEngineConfig> HttpClientConfig<T>.configureMavenCentral(
-    userName: String,
-    password: String,
-) {
-    expectSuccess = true
-    BearerAuthAuth("$userName:$password".encodeBase64())
-    install(ContentNegotiation) {
-        jsonIo()
-    }
-}
-
-internal suspend fun HttpClient.uploadToMavenCentral(
-    zipFileName: String,
-    zipFileSize: Long,
-    zipFileStream: RawSource,
-    delay: Duration,
-) {
-    val deploymentId = uploadComponents(
-        publishingType = PublishingTypePublishingType.Automatic,
-    ) {
-        setBody(MultiPartFormDataContent(formData {
-            append(
-                key = "bundle",
-                filename = zipFileName,
-                contentType = Application.OctetStream,
-                size = zipFileSize,
-            ) {
-                transferFrom(zipFileStream)
-            }
-        }))
-        accept(Plain)
-    }
-    while (true) {
-        delay(delay)
-        val status = checkStatus(id = deploymentId)!!
-        when (status.deploymentState) {
-            DeploymentState.Pending,
-            DeploymentState.Validating,
-                -> continue
-
-            DeploymentState.Validated,
-            DeploymentState.Publishing,
-            DeploymentState.Published,
-                -> break
-
-            DeploymentState.Failed -> error(status.errors!!)
         }
     }
 }

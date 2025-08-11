@@ -1,15 +1,24 @@
 import io.github.hfhbd.kfx.openapi.OpenApi
 
 plugins {
-    id("kotlinSetup")
+    id("setup")
     id("io.github.hfhbd.kfx")
 }
 
 dependencies {
-    api(libs.serialization.json)
-    api(libs.ktor.client.core)
+    api(gradleApi())
 
-    testFixturesApi(libs.ktor.server.core)
+    api(libs.ktor.client.core)
+    api(libs.ktor.client.logging)
+    api(libs.serialization.json)
+    api(libs.ktor.serialization.kotlinx.json)
+    api(libs.ktor.client.content.negotiation)
+
+    implementation(libs.ktor.client.java)
+
+    testFixturesImplementation(libs.ktor.server.core)
+    testFixturesImplementation(libs.ktor.server.content.negotiation)
+    testFixturesImplementation(kotlin("test-junit5"))
 }
 
 kfx {
@@ -43,9 +52,8 @@ kfx {
     }
 }
 
-configurations.mavenCentralWorkerClasspath {
-    resolutionStrategy.dependencySubstitution {
-        substitute(project(projects.centralApi.path))
-            .using(module(libs.central.api.get().toString()))
+testing.suites.named("test", JvmTestSuite::class) {
+    dependencies {
+        implementation(libs.ktor.server.test.host)
     }
 }

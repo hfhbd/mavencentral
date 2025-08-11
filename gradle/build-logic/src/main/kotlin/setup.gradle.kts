@@ -1,8 +1,30 @@
 plugins {
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     id("maven-publish")
     id("signing")
     id("io.github.hfhbd.mavencentral")
     id("java-test-fixtures")
+}
+
+kotlin.jvmToolchain(21)
+
+testing.suites.withType(JvmTestSuite::class).configureEach {
+    useKotlinTest()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+configurations.apiElements {
+    attributes {
+        attribute(
+            GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE,
+            objects.named(GradleVersion.current().version)
+        )
+    }
 }
 
 publishing {
