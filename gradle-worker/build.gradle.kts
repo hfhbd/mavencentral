@@ -57,3 +57,7 @@ testing.suites.named("test", JvmTestSuite::class) {
         implementation(libs.ktor.server.test.host)
     }
 }
+
+publishing.publications.register<MavenPublication>("maven") {
+    from(components["java"])
+}
