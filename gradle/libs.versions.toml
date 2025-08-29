@@ -24,4 +24,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 mavencentral = { id = "io.github.hfhbd.mavencentral", version.ref = "mavencentral" }
 kfx = { id = "io.github.hfhbd.kfx", version = "0.0.10" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
-develocity = { id = "com.gradle.develocity", version = "4.1" }
+develocity = { id = "com.gradle.develocity", version = "4.1.1" }
