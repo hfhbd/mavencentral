@@ -1,7 +1,6 @@
 [versions]
 kotlin = "2.2.10"
 ktor = "3.2.3"
-mavencentral = "0.0.17"
 
 [libraries]
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
@@ -16,12 +15,10 @@ ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
 
-central-api = { module = "io.github.hfhbd.mavencentral:central-api", version.ref = "mavencentral" }
-
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-mavencentral = { id = "io.github.hfhbd.mavencentral", version.ref = "mavencentral" }
+mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.17" }
 kfx = { id = "io.github.hfhbd.kfx", version = "0.0.10" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
 develocity = { id = "com.gradle.develocity", version = "4.1.1" }
