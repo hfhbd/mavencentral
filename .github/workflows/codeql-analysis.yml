@@ -11,11 +11,12 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       security-events: write
 
     steps:
       - uses: actions/checkout@v5
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -33,6 +34,7 @@ jobs:
     name: Analyze Actions
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       security-events: write
 
     steps:

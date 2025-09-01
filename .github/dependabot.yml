@@ -12,7 +12,7 @@ updates:
       interval: "daily"
     assignees:
       - "hfhbd"
-  - package-ecosystem: "devcontainer"
+  - package-ecosystem: "devcontainers"
     directory: "/"
     schedule:
       interval: "daily"
