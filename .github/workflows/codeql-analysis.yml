@@ -21,9 +21,28 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
+          queries: security-extended
 
       - name: Build with Gradle
         run: ./gradlew --no-build-cache classes
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  analyzeActions:
+    name: Analyze Actions
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: actions
+          queries: security-extended
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
