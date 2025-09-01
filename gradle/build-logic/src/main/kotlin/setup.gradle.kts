@@ -57,13 +57,11 @@ publishing {
                 developerConnection.set("scm:git://github.com/hfhbd/mavencentral.git")
                 url.set("https://github.com/hfhbd/mavencentral")
             }
-
-            // https://github.com/gradle/gradle/issues/28759
-            this.withXml {
-                this.asNode().appendNode("distributionManagement").appendNode("repository").apply {
-                    this.appendNode("id", "github")
-                    this.appendNode("name", "GitHub hfhbd Apache Maven Packages")
-                    this.appendNode("url", "https://maven.pkg.github.com/hfhbd/mavencentral")
+            distributionManagement {
+                repository {
+                    id = "github"
+                    name = "GitHub hfhbd Apache Maven Packages"
+                    url = "https://maven.pkg.github.com/hfhbd/mavencentral"
                 }
             }
         }
