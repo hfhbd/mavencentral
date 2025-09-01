@@ -3,7 +3,8 @@ import io.github.hfhbd.mavencentral.gradle.*
 val deps = configurations.dependencyScope("mavenCentralClosing")
 
 dependencies {
-    deps("io.github.hfhbd.mavencentral:gradle-worker:$VERSION")
+    deps(ktorJava)
+    deps(ktorLogging)
 }
 
 val classpath = configurations.resolvable("mavenCentralClosingClasspath") {
