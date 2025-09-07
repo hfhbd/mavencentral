@@ -22,6 +22,7 @@ jobs:
         uses: github/codeql-action/init@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           languages: kotlin
+          build-mode: manual
           queries: security-extended
 
       - name: Build with Gradle
@@ -44,6 +45,7 @@ jobs:
         uses: github/codeql-action/init@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           languages: actions
+          build-mode: none
           queries: security-extended
 
       - name: Perform CodeQL Analysis
