@@ -17,6 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v4
+        with:
+          build-scan-publish: true
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
+          build-scan-terms-of-use-agree: 'yes'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@4e94bd11f71e507f7f87df81788dff88d1dacbfb # v3
