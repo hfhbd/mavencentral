@@ -23,7 +23,7 @@ jobs:
           build-scan-terms-of-use-agree: 'yes'
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@5fe9434cd24fe243e33e7f3305f8a5b519b70280 # v3
+        uses: github/codeql-action/init@0499de31b99561a6d14a36a5f662c2a54f91beee # v3
         with:
           languages: kotlin
           build-mode: manual
@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew --no-build-cache classes
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@5fe9434cd24fe243e33e7f3305f8a5b519b70280 # v3
+        uses: github/codeql-action/analyze@0499de31b99561a6d14a36a5f662c2a54f91beee # v3
 
   analyzeActions:
     name: Analyze Actions
@@ -46,11 +46,11 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@5fe9434cd24fe243e33e7f3305f8a5b519b70280 # v3
+        uses: github/codeql-action/init@0499de31b99561a6d14a36a5f662c2a54f91beee # v3
         with:
           languages: actions
           build-mode: none
           queries: security-extended
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@5fe9434cd24fe243e33e7f3305f8a5b519b70280 # v3
+        uses: github/codeql-action/analyze@0499de31b99561a6d14a36a5f662c2a54f91beee # v3
