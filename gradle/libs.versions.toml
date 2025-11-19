@@ -19,5 +19,5 @@ ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negoti
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
-kfx = { id = "io.github.hfhbd.kfx", version = "0.1.1" }
+kfx = { id = "io.github.hfhbd.kfx", version = "0.1.5" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
