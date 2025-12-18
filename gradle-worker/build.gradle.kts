@@ -34,16 +34,14 @@ kfx {
     register("mavenCentralClient", OpenApi::class) {
         files.from(file("central.json"))
         dependencies {
-            compiler(kotlin())
+            compiler(kotlinClasses())
             compiler(kotlinxJson())
             compiler(ktorClient())
         }
 
         packageName.set("io.github.hfhbd.mavencentral.api")
 
-        sourceSets.main {
-            usingSourceSet(kotlin)
-        }
+        usingKotlinSourceSet(kotlin.sourceSets.main)
     }
 
     register("mavenCentralServer", OpenApi::class) {
@@ -55,9 +53,7 @@ kfx {
 
         packageName.set("io.github.hfhbd.mavencentral.api")
 
-        sourceSets.testFixtures {
-            usingSourceSet(kotlin)
-        }
+        usingKotlinSourceSet(kotlin.sourceSets.testFixtures)
     }
 }
 
