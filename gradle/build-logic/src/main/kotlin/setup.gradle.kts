@@ -79,5 +79,6 @@ signing {
         providers.gradleProperty("signingKey").orNull,
         providers.gradleProperty("signingPassword").orNull,
     )
+    isRequired = providers.gradleProperty("signingKey").isPresent
     sign(publishing.publications)
 }
