@@ -1,10 +1,5 @@
 import io.github.hfhbd.mavencentral.gradle.*
 
-plugins {
-    id("maven-publish")
-    id("signing")
-}
-
 val mavenCentralWorker = configurations.dependencyScope("mavenCentralWorker")
 val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerClasspath") {
     extendsFrom(mavenCentralWorker.get())
@@ -17,12 +12,20 @@ dependencies {
     mavenCentralWorker(ktorSerializationKotlinxJson)
 }
 
+val extension = extensions.create<MavenCentralAggregationExtension>("mavenCentral")
+
+val mavenCentralAggregation = configurations.resolvable("mavenCentralAggregation") {
+    fromDependencyCollector(extension.dependencies.publishToMavenCentral)
+    attributes {
+        attribute(Usage.USAGE_ATTRIBUTE, named("maven-central"))
+    }
+}
+
 val projectGroup = provider { group.toString() }
 val projectName = name
 val projectVersion = provider { version.toString() }
 
-val localMavenCentralRepoDir = projectVersion.flatMap { layout.buildDirectory.dir("mavencentral/$it/repo") }
-val repoFiles = files(localMavenCentralRepoDir)
+val repoFiles = files(mavenCentralAggregation)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
     archiveFileName.set(projectGroup.zip(projectVersion) { projectGroup, projectVersion ->
@@ -42,33 +45,4 @@ val publishToMavenCentral by tasks.registering(PublishToMavenCentral::class) {
         it.archiveFile
     })
     workerClassPath.from(mavenCentralWorkerClassPath)
-}
-
-tasks.publish {
-    dependsOn(publishToMavenCentral)
-}
-
-val mavenCentralArtifacts = configurations.consumable("mavenCentralArtifacts") {
-    attributes {
-        attribute(Usage.USAGE_ATTRIBUTE, named("maven-central"))
-    }
-    outgoing.artifact(localMavenCentralRepoDir)
-}
-
-publishing {
-    val repoName = "localMavenCentral"
-
-    repositories.maven {
-        name = repoName
-        url = uri(localMavenCentralRepoDir)
-    }
-
-    publications.withType<MavenPublication>().all {
-        val pubName = name.replaceFirstChar { it.uppercaseChar() }
-
-        val publishToLocalMavenCentral = tasks.named(
-            "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
-        )
-        repoFiles.builtBy(publishToLocalMavenCentral)
-    }
 }

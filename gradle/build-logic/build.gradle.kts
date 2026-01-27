@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.plugins.mavencentral.dep)
     implementation(libs.plugins.kfx.dep)
     implementation(libs.plugins.foojay.dep)
+    implementation(libs.plugins.sigstore.dep)
 }
 
 val Provider<PluginDependency>.dep: Provider<String> get() = map { "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version}" }

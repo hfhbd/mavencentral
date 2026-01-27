@@ -18,3 +18,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 kfx = { id = "io.github.hfhbd.kfx", version = "0.2.4" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
+sigstore = { id = "dev.sigstore.sign", version = "2.0.0" }
