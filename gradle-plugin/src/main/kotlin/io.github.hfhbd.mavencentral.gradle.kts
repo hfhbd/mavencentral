@@ -45,6 +45,13 @@ tasks.publish {
     dependsOn(publishToMavenCentral)
 }
 
+val mavenCentralArtifacts = configurations.consumable("mavenCentralArtifacts") {
+    attributes {
+        attribute(Usage.USAGE_ATTRIBUTE, named("maven-central"))
+    }
+    outgoing.artifact(localMavenCentralRepoDir)
+}
+
 publishing {
     val repoName = "localMavenCentral"
 
