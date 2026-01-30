@@ -3,6 +3,8 @@ plugins {
     id("setup")
 }
 
+kotlin.jvmToolchain(21)
+
 dependencies {
     implementation(projects.gradleWorker)
 }

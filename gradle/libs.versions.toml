@@ -3,9 +3,6 @@ kotlin = "2.3.0"
 ktor = "3.4.0"
 
 [libraries]
-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.10.0" }
-
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -21,3 +18,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
 kfx = { id = "io.github.hfhbd.kfx", version = "0.2.4" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
+sigstore = { id = "dev.sigstore.sign", version = "2.0.0" }

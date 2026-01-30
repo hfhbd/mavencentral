@@ -2,8 +2,12 @@ import io.github.hfhbd.kfx.openapi.OpenApi
 
 plugins {
     id("setup")
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     id("io.github.hfhbd.kfx")
 }
+
+kotlin.jvmToolchain(21)
 
 dependencies {
     compileOnly(gradleApi())

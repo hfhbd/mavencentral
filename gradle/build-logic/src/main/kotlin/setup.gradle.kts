@@ -1,13 +1,11 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("java-library")
     id("maven-publish")
     id("signing")
     id("io.github.hfhbd.mavencentral")
     id("java-test-fixtures")
+    id("dev.sigstore.sign")
 }
-
-kotlin.jvmToolchain(21)
 
 testing.suites.withType(JvmTestSuite::class).configureEach {
     useKotlinTest()
@@ -79,5 +77,6 @@ signing {
         providers.gradleProperty("signingKey").orNull,
         providers.gradleProperty("signingPassword").orNull,
     )
+    isRequired = providers.gradleProperty("signingKey").isPresent
     sign(publishing.publications)
 }
