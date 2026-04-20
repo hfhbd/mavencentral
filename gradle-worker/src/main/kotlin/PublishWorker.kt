@@ -22,7 +22,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.ContentType.Text.Plain
 import io.ktor.serialization.kotlinx.json.jsonIo
-import io.ktor.util.encodeBase64
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.RawSource
@@ -31,6 +30,7 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
+import kotlin.io.encoding.Base64
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import org.gradle.api.logging.Logging as GradleLogging
@@ -85,7 +85,7 @@ internal fun <T : HttpClientEngineConfig> HttpClientConfig<T>.configureMavenCent
     password: String,
 ) {
     expectSuccess = true
-    BearerAuthAuth("$userName:$password".encodeBase64())
+    BearerAuthAuth(Base64.encode("$userName:$password".encodeToByteArray()))
     install(ContentNegotiation) {
         jsonIo()
     }
@@ -125,7 +125,7 @@ internal suspend fun HttpClient.uploadToMavenCentral(
             DeploymentState.Published,
                 -> break
 
-            DeploymentState.Failed -> error(status.errors!!)
+            DeploymentState.Failed -> error(status.errors)
         }
     }
 }
