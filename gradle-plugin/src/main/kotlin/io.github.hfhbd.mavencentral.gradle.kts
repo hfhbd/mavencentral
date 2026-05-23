@@ -36,7 +36,7 @@ val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip:
     destinationDirectory.set(layout.buildDirectory.dir("mavencentral/publishing"))
 }
 
-val publishToMavenCentral by tasks.registering(PublishToMavenCentral::class) {
+val publishToMavenCentral = tasks.register("publishToMavenCentral", PublishToMavenCentral::class) {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     uploadZip.set(createMavenCentralZipFile.flatMap {
         it.archiveFile
