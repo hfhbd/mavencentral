@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 ktor = "3.5.0"
 
 [libraries]
@@ -16,6 +16,6 @@ ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negoti
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 mavencentral = { id = "io.github.hfhbd.mavencentral", version = "0.0.23" }
-kfx = { id = "io.github.hfhbd.kfx", version = "0.2.9" }
+kfx = { id = "io.github.hfhbd.kfx", version = "0.2.10" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
 sigstore = { id = "dev.sigstore.sign", version = "2.2.0" }
