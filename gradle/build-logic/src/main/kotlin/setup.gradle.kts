@@ -4,7 +4,7 @@ plugins {
     id("signing")
     id("io.github.hfhbd.mavencentral")
     id("java-test-fixtures")
-    id("dev.sigstore.sign")
+//    id("dev.sigstore.sign")
 }
 
 testing.suites.withType(JvmTestSuite::class).configureEach {

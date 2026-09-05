@@ -14,6 +14,11 @@ import javax.inject.Inject
 @DisableCachingByDefault
 abstract class PublishToMavenCentral : DefaultTask() {
 
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
+
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val uploadZip: RegularFileProperty

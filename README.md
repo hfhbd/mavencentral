@@ -26,6 +26,15 @@ plugins {
 }
 ```
 
+and apply the aggregation plugin in 1 project, eg the root project.
+
+```kotlin
+// build.gradle (.kts)
+plugins {
+  id("io.github.hfhbd.mavencentral.upload") version "LATEST"
+}
+```
+
 You need to setup and configure the publications using the core `maven-publish` and `signing` plugins.
 
 To publish the publications, call `./gradlew publishToMavenCentral -PmavenCentralUsername=MYUSERNAME -PmavenCentralPassword=MYSECRETPASSWORD`.

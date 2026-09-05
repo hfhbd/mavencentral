@@ -10,7 +10,7 @@ dependencies {
 }
 
 val storeVersion = tasks.register("storeVersion",StoreVersion::class) {
-    version.put("core", "io.github.hfhbd.mavencentral:core:$version")
+    version.put("core", "io.github.hfhbd.mavencentral:core:${project.version}")
 }
 
 sourceSets.main {
