@@ -23,7 +23,7 @@ dependencies {
     testFixturesImplementation(kotlin("test-junit5"))
 }
 
-val storeVersion by tasks.registering(StoreVersion::class) {
+val storeVersion = tasks.register("storeVersion",StoreVersion::class) {
     version.put("ktorJava", libs.ktor.client.java.get().toString())
     version.put("ktorLogging", libs.ktor.client.logging.get().toString())
     version.put("ktorClientContentNegotiation", libs.ktor.client.content.negotiation.get().toString())
