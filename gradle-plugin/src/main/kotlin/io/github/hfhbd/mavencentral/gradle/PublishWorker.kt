@@ -7,7 +7,6 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.api.logging.Logging as GradleLogging
 
-
 abstract class PublishWorker : WorkAction<PublishWorker.PublishParameters> {
     interface PublishParameters : WorkParameters {
         val uploadZip: RegularFileProperty

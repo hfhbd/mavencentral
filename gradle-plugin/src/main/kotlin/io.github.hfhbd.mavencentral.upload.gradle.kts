@@ -2,14 +2,11 @@ import io.github.hfhbd.mavencentral.gradle.*
 
 val mavenCentralWorker = configurations.dependencyScope("mavenCentralWorker")
 val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerClasspath") {
-    extendsFrom(mavenCentralWorker.get())
+    extendsFrom(mavenCentralWorker)
 }
 
 dependencies {
-    mavenCentralWorker(ktorJava)
-    mavenCentralWorker(ktorLogging)
-    mavenCentralWorker(ktorClientContentNegotiation)
-    mavenCentralWorker(ktorSerializationKotlinxJson)
+    mavenCentralWorker(core)
 }
 
 val extension = extensions.create<MavenCentralAggregationExtension>("mavenCentral")
@@ -39,7 +36,7 @@ val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip:
     destinationDirectory.set(layout.buildDirectory.dir("mavencentral/publishing"))
 }
 
-val publishToMavenCentral by tasks.registering(PublishToMavenCentral::class) {
+val publishToMavenCentral = tasks.register("publishToMavenCentral", PublishToMavenCentral::class) {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
     uploadZip.set(createMavenCentralZipFile.flatMap {
         it.archiveFile

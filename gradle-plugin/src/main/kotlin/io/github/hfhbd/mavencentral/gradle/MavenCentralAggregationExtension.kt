@@ -3,10 +3,13 @@ package io.github.hfhbd.mavencentral.gradle
 import org.gradle.api.Action
 import org.gradle.api.artifacts.dsl.Dependencies
 import org.gradle.api.artifacts.dsl.DependencyCollector
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.Nested
 import org.gradle.declarative.dsl.model.annotations.HiddenInDefinition
+import org.gradle.features.binding.BuildModel
+import org.gradle.features.binding.Definition
 
-interface MavenCentralAggregationExtension {
+interface MavenCentralAggregationExtension : Definition<MavenCentralBuildModel> {
     @get:Nested
     val dependencies: MavenCentralAggregationDependencies
 
@@ -18,4 +21,8 @@ interface MavenCentralAggregationExtension {
 
 interface MavenCentralAggregationDependencies : Dependencies {
     val publishToMavenCentral: DependencyCollector
+}
+
+interface MavenCentralBuildModel : BuildModel {
+    val uploadFiles: ConfigurableFileCollection
 }
