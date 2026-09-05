@@ -1,6 +1,5 @@
 package io.github.hfhbd.mavencentral.gradle
 
-import io.github.hfhbd.mavencentral.gradle.workactions.PublishWorker
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.repositories.PasswordCredentials
 import org.gradle.api.file.ConfigurableFileCollection
@@ -35,7 +34,7 @@ abstract class PublishToMavenCentral : DefaultTask() {
             classpath.from(workerClassPath)
         }.submit(PublishWorker::class.java) {
             this.uploadZip.set(this@PublishToMavenCentral.uploadZip)
-            this.userName.set(this@PublishToMavenCentral.credentials.map { it.username })
+            this.username.set(this@PublishToMavenCentral.credentials.map { it.username })
             this.password.set(this@PublishToMavenCentral.credentials.map { it.password })
         }
     }
