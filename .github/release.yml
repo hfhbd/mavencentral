@@ -13,3 +13,4 @@ changelog:
       exclude:
         labels:
           - build
+          - github_actions

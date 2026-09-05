@@ -43,6 +43,8 @@ jobs:
       packages: write
       id-token: write
 
+    environment: CD
+
     steps:
       - name: Set environment for version
         run: long="${{ github.ref }}"; version=${long#"refs/tags/v"}; echo "version=${version}" >> $GITHUB_OUTPUT
@@ -59,3 +61,5 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
