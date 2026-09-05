@@ -7,7 +7,7 @@ plugins {
 
 val mavenCentralWorker = configurations.dependencyScope("mavenCentralWorker")
 val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerClasspath") {
-    extendsFrom(mavenCentralWorker.get())
+    extendsFrom(mavenCentralWorker)
 }
 
 dependencies {
@@ -61,6 +61,7 @@ publishing {
 
         val publishToLocalMavenCentral = tasks.named(
             "publish${pubName}PublicationTo${repoName.replaceFirstChar { it.uppercaseChar() }}Repository",
+            PublishToMavenRepository::class,
         )
         repoFiles.builtBy(publishToLocalMavenCentral)
     }
