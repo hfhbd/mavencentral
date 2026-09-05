@@ -31,7 +31,7 @@ and apply the aggregation plugin in 1 project, eg the root project.
 ```kotlin
 // build.gradle (.kts)
 plugins {
-  id("io.github.hfhbd.mavencentral") version "LATEST"
+  id("io.github.hfhbd.mavencentral.upload") version "LATEST"
 }
 ```
 
