@@ -17,5 +17,3 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 include(":core")
 include(":gradle-plugin")
-
-includeBuild(".")

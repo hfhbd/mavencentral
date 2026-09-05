@@ -26,7 +26,7 @@ plugins {
 }
 ```
 
-and apply the aggregation plugin in 1 project, eg the root project.
+and apply the upload plugin in 1 project, e.g. the root project.
 
 ```kotlin
 // build.gradle (.kts)
@@ -34,6 +34,8 @@ plugins {
   id("io.github.hfhbd.mavencentral.upload") version "LATEST"
 }
 ```
+
+If you want to publish all projects, you can also apply the `io.github.hfhbd.mavencentral.upload.all` settings plugin.
 
 You need to setup and configure the publications using the core `maven-publish` and `signing` plugins.
 
