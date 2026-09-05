@@ -2,7 +2,6 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("signing")
-    id("io.github.hfhbd.mavencentral")
     id("java-test-fixtures")
 //    id("dev.sigstore.sign")
 }
