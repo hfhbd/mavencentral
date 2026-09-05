@@ -11,10 +11,7 @@ val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerC
 }
 
 dependencies {
-    mavenCentralWorker(ktorJava)
-    mavenCentralWorker(ktorLogging)
-    mavenCentralWorker(ktorClientContentNegotiation)
-    mavenCentralWorker(ktorSerializationKotlinxJson)
+    mavenCentralWorker(core)
 }
 
 val projectGroup = provider { group.toString() }

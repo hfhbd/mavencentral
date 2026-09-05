@@ -6,7 +6,15 @@ plugins {
 kotlin.jvmToolchain(21)
 
 dependencies {
-    implementation(projects.gradleWorker)
+    compileOnly(projects.core)
+}
+
+val storeVersion = tasks.register("storeVersion",StoreVersion::class) {
+    version.put("core", "io.github.hfhbd.mavencentral:core:$version")
+}
+
+sourceSets.main {
+    kotlin.srcDir(storeVersion)
 }
 
 gradlePlugin.plugins.configureEach {
