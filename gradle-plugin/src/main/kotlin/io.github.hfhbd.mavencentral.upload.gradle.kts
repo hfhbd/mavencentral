@@ -1,5 +1,9 @@
 import io.github.hfhbd.mavencentral.gradle.*
 
+plugins {
+    id("publishing")
+}
+
 val mavenCentralWorker = configurations.dependencyScope("mavenCentralWorker")
 val mavenCentralWorkerClassPath = configurations.resolvable("mavenCentralWorkerClasspath") {
     extendsFrom(mavenCentralWorker)
@@ -42,4 +46,8 @@ val publishToMavenCentral = tasks.register("publishToMavenCentral", PublishToMav
         it.archiveFile
     })
     workerClassPath.from(mavenCentralWorkerClassPath)
+}
+
+tasks.publish {
+    dependsOn(publishToMavenCentral)
 }

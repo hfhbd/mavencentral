@@ -52,6 +52,7 @@ fun uploadToMavenCentralBlocking(
                 }
             }
         }
+        install(HttpRequestRetry)
     }
 
     runBlocking {

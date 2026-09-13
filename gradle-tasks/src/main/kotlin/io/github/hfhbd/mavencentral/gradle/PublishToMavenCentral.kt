@@ -31,7 +31,7 @@ abstract class PublishToMavenCentral : DefaultTask() {
     internal abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
-    internal abstract val workerClassPath: ConfigurableFileCollection
+    abstract val workerClassPath: ConfigurableFileCollection
 
     @TaskAction
     internal fun publish() {
