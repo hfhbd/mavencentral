@@ -6,6 +6,7 @@ plugins {
 kotlin.jvmToolchain(21)
 
 dependencies {
+    implementation(projects.gradleTasks)
     compileOnly(projects.core)
 }
 
@@ -23,5 +24,5 @@ gradlePlugin.plugins.configureEach {
 }
 
 tasks.validatePlugins {
-    enableStricterValidation.set(true)
+    enableStricterValidation = true
 }

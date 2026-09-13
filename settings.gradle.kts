@@ -16,4 +16,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 include(":core")
+include(":gradle-tasks")
 include(":gradle-plugin")
+
+includeBuild(".")
