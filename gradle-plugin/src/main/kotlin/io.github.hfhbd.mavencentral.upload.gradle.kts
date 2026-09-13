@@ -29,22 +29,22 @@ val projectVersion = provider { version.toString() }
 val repoFiles = files(mavenCentralAggregation)
 
 val createMavenCentralZipFile = tasks.register("createMavenCentralZipFile", Zip::class) {
-    archiveFileName.set(projectGroup.zip(projectVersion) { projectGroup, projectVersion ->
+    archiveFileName = projectGroup.zip(projectVersion) { projectGroup, projectVersion ->
         "$projectGroup-$projectName-$projectVersion.zip"
-    })
+    }
     from(repoFiles) {
         exclude {
             it.name.startsWith("maven-metadata.xml")
         }
     }
-    destinationDirectory.set(layout.buildDirectory.dir("mavencentral/publishing"))
+    destinationDirectory = layout.buildDirectory.dir("mavencentral/publishing")
 }
 
 val publishToMavenCentral = tasks.register("publishToMavenCentral", PublishToMavenCentral::class) {
     group = PublishingPlugin.PUBLISH_TASK_GROUP
-    uploadZip.set(createMavenCentralZipFile.flatMap {
+    uploadZip = createMavenCentralZipFile.flatMap {
         it.archiveFile
-    })
+    }
     workerClassPath.from(mavenCentralWorkerClassPath)
 }
 
