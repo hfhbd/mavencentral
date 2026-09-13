@@ -5,7 +5,7 @@ gradle.lifecycle.beforeProject {
         pluginManager.apply("io.github.hfhbd.mavencentral.upload")
         val mavenCentral = extensions.getByName("mavenCentral") as MavenCentralAggregationExtension
         mavenCentral.dependencies {
-            for(subproject in this@beforeProject.subprojects) {
+            for (subproject in this@beforeProject.subprojects) {
                 publishToMavenCentral.add(dependencyFactory.createProjectDependency(subproject.path))
             }
         }

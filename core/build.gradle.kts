@@ -1,4 +1,5 @@
 import io.github.hfhbd.kfx.openapi.OpenApi
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     id("setup")
@@ -7,7 +8,11 @@ plugins {
     id("io.github.hfhbd.kfx")
 }
 
-kotlin.jvmToolchain(21)
+kotlin {
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation()
+    jvmToolchain(21)
+}
 
 dependencies {
     implementation(libs.ktor.client.java)

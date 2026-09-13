@@ -6,6 +6,7 @@ plugins {
 kotlin.jvmToolchain(21)
 
 dependencies {
+    implementation(projects.gradleTasks)
     compileOnly(projects.core)
 }
 
