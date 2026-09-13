@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("java-test-fixtures")
-//    id("dev.sigstore.sign")
+    id("dev.sigstore.sign")
 }
 
 testing.suites.withType(JvmTestSuite::class).configureEach {
@@ -39,26 +39,26 @@ publishing {
     }
     publications.withType<MavenPublication>().configureEach {
         pom {
-            name.set("hfhbd mavencentral")
-            description.set("hfhbd mavencentral")
-            url.set("https://github.com/hfhbd/mavencentral")
+            name = "hfhbd mavencentral"
+            description = "hfhbd mavencentral"
+            url = "https://github.com/hfhbd/mavencentral"
             licenses {
                 license {
-                    name.set("Apache-2.0")
-                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    name = "Apache-2.0"
+                    url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
                 }
             }
             developers {
                 developer {
-                    id.set("hfhbd")
-                    name.set("Philip Wedemann")
-                    email.set("mybztg+mavencentral@icloud.com")
+                    id = "hfhbd"
+                    name = "Philip Wedemann"
+                    email = "mybztg+mavencentral@icloud.com"
                 }
             }
             scm {
-                connection.set("scm:git://github.com/hfhbd/mavencentral.git")
-                developerConnection.set("scm:git://github.com/hfhbd/mavencentral.git")
-                url.set("https://github.com/hfhbd/mavencentral")
+                connection = "scm:git://github.com/hfhbd/mavencentral.git"
+                developerConnection = "scm:git://github.com/hfhbd/mavencentral.git"
+                url = "https://github.com/hfhbd/mavencentral"
             }
             distributionManagement {
                 repository {

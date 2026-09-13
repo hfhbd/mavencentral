@@ -10,5 +10,5 @@ dependencies {
 }
 
 tasks.validatePlugins {
-    enableStricterValidation.set(true)
+    enableStricterValidation = true
 }

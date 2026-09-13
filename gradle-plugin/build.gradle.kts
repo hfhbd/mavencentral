@@ -24,5 +24,5 @@ gradlePlugin.plugins.configureEach {
 }
 
 tasks.validatePlugins {
-    enableStricterValidation.set(true)
+    enableStricterValidation = true
 }
