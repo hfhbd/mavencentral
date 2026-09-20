@@ -15,6 +15,10 @@ dependencies {
 
 val extension = extensions.create<MavenCentralAggregationExtension>("mavenCentral")
 
+pluginManager.withPlugin("io.github.hfhbd.mavencentral") {
+    extension.dependencies.publishToMavenCentral.add(dependencyFactory.createProjectDependency())
+}
+
 val mavenCentralAggregation = configurations.resolvable("mavenCentralAggregation") {
     fromDependencyCollector(extension.dependencies.publishToMavenCentral)
     attributes {
